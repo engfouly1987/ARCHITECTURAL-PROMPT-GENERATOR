@@ -1,0 +1,740 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=IBM+Plex+Mono:wght@400;500&family=Cairo:wght@400;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg0:#0e0e0e;--bg1:#161616;--bg2:#1e1e1e;--bg3:#272727;
+--border:#333;--border2:#444;
+--text1:#e8e4d8;--text2:#a09a8c;--text3:#6a6460;
+--gold:#c8a96e;--green:#2c4a3e;--green2:#3d6b57;
+--blue:#4a8fa8;--red:#a85a4a;
+}
+body{background:transparent;color:var(--text1)}
+
+.wrap{font-family:'Cairo',sans-serif;background:var(--bg0);border:1px solid var(--border);border-radius:6px;overflow:hidden;max-width:960px;margin:0 auto}
+
+.topbar{background:var(--bg1);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between}
+.topbar-title{font-family:'Playfair Display',serif;color:var(--text1);font-size:17px;letter-spacing:1.5px}
+.topbar-sub{font-family:'IBM Plex Mono',monospace;color:var(--text3);font-size:10px;margin-top:2px}
+.sig{font-family:'Playfair Display',serif;color:var(--gold);font-size:12px;border-left:2px solid var(--gold);padding-left:10px;text-align:left}
+.sig span{display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--gold);opacity:0.6;margin-top:2px}
+
+.controls{padding:20px 24px;background:var(--bg1);border-bottom:1px solid var(--border)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px}
+.lbl{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px}
+
+select{width:100%;padding:9px 12px;background:var(--bg2);border:1px solid var(--border2);border-radius:3px;font-family:'Cairo',sans-serif;font-size:13px;color:var(--text1);cursor:pointer;direction:rtl;-webkit-appearance:none;appearance:none}
+select:focus{outline:none;border-color:var(--gold)}
+
+.genbtn{width:100%;padding:12px;background:var(--green);color:var(--text1);border:none;border-radius:3px;font-family:'Cairo',sans-serif;font-size:14px;font-weight:600;cursor:pointer;letter-spacing:0.5px;transition:background 0.2s}
+.genbtn:hover{background:var(--green2)}
+.genbtn:active{transform:scale(0.99)}
+
+.sheet{display:none;background:var(--bg1)}
+.sheet.on{display:block}
+
+.sh-head{background:var(--bg2);padding:14px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
+.sh-title{font-family:'Playfair Display',serif;font-size:14px;color:var(--gold);letter-spacing:1px}
+.sh-meta{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text3)}
+
+.sh-body{padding:20px 24px}
+
+.drawings{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.dbox{background:var(--bg0);border:1px solid var(--border);border-radius:3px;aspect-ratio:4/3;position:relative;overflow:hidden}
+.dlbl{position:absolute;bottom:8px;left:10px;font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--text3);letter-spacing:1px}
+.dscl{position:absolute;bottom:8px;right:10px;font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--text3)}
+
+.pbox{background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:16px;margin-bottom:14px}
+.pbox p{font-family:'IBM Plex Mono',monospace;font-size:11px;line-height:1.9;color:var(--text2);direction:ltr;text-align:left}
+
+.actions{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.copybtn{padding:8px 20px;background:transparent;border:1px solid var(--gold);color:var(--gold);border-radius:3px;font-family:'Cairo',sans-serif;font-size:12px;cursor:pointer;transition:background 0.2s}
+.copybtn:hover{background:rgba(200,169,110,0.1)}
+.copymsg{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--green2);opacity:0;transition:opacity 0.3s}
+
+.footer{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:var(--bg3);border-radius:3px}
+.fsig{font-family:'Playfair Display',serif;color:var(--gold);font-size:12px}
+.ftag{font-family:'IBM Plex Mono',monospace;color:var(--text3);font-size:9px}
+
+svg text{font-family:'IBM Plex Mono',monospace}
+</style>
+
+<div class="wrap">
+<div class="topbar">
+  <div>
+    <div class="topbar-title">ARCHITECTURAL PROMPT GENERATOR</div>
+    <div class="topbar-sub">80 BUILDING TYPES · PROFESSIONAL DESIGN SHEET SYSTEM</div>
+  </div>
+  <div class="sig">Ahmed El-Fouly<span>Architect / AI Design Prompts</span></div>
+</div>
+
+<div class="controls">
+  <div class="grid2">
+    <div>
+      <div class="lbl">نوع المبنى — 80 خيار</div>
+      <select id="btype">
+        <optgroup label="── السكني ──">
+          <option value="narrow_villa">1. فيلا عصرية على أرض ضيقة</option>
+          <option value="eco_house">2. منزل اقتصادي لعائلة متوسطة</option>
+          <option value="duplex">10. دوبلكس مع فصل الضيافة</option>
+          <option value="rural">11. بيت ريفي بلمسات معاصرة</option>
+          <option value="coastal">12. شاليه ساحلي بواجهات مفتوحة</option>
+          <option value="cabin">13. كوخ جبلي بمواد طبيعية</option>
+          <option value="tiny">14. مشروع Tiny House</option>
+          <option value="apt">9. شقق متكررة لعمارة سكنية</option>
+          <option value="villa_courtyard">23. منزل بباحة داخلية Courtyard</option>
+          <option value="desert_house">24. بيت صحراوي مقاوم للحرارة</option>
+          <option value="mountain_house">25. منزل جبلي على أرض منحدرة</option>
+          <option value="sea_house">26. منزل بإطلالة بانورامية على البحر</option>
+          <option value="garden_house">27. منزل بحديقة داخلية وزجاج واسع</option>
+          <option value="expandable">28. وحدة سكنية قابلة للتوسعة</option>
+          <option value="workers">29. سكن عمال اقتصادي</option>
+          <option value="privacy">30. مبنى سكني بخصوصية عالية</option>
+          <option value="studio_apt">21. شقة استوديو ذكية المساحة</option>
+          <option value="penthouse">22. بنتهاوس بروف خاص</option>
+        </optgroup>
+        <optgroup label="── المباني العامة ──">
+          <option value="school">6. مدرسة ابتدائية مع فصل الحركة</option>
+          <option value="hospital">7. مستشفى صغير / مركز طبي</option>
+          <option value="mosque">8. مسجد مع معالجة الإضاءة</option>
+          <option value="library">41. مكتبة عامة بفراغ مركزي</option>
+          <option value="youth">42. مركز ثقافي للشباب</option>
+          <option value="conference">43. قاعة مؤتمرات متعددة</option>
+          <option value="firestation">45. مبنى إطفاء وإنقاذ</option>
+          <option value="police">46. مركز شرطة بتوزيع أمني</option>
+          <option value="bus">47. محطة نقل حضري</option>
+          <option value="uni_lib">52. مكتبة جامعية حديثة</option>
+          <option value="museum">57. متحف صغير بتجربة حركة</option>
+          <option value="gallery">58. جاليري فني</option>
+        </optgroup>
+        <optgroup label="── التجاري ──">
+          <option value="office">5. مبنى إداري صغير</option>
+          <option value="mixed">26. Mixed-Use سكني تجاري</option>
+          <option value="flex_office">27. مبنى مكتبي مرن</option>
+          <option value="cowork">54. مبنى Coworking</option>
+          <option value="mall">47b. مول تجاري محدود</option>
+          <option value="restaurant">48. مطعم مع توزيع الخدمة</option>
+          <option value="fuel">44. محطة وقود حديثة</option>
+          <option value="sports">48b. نادي رياضي متكامل</option>
+          <option value="sports_hall">49. صالة ألعاب داخلية</option>
+          <option value="wedding">50. قاعة أفراح احتفالية</option>
+          <option value="vocational">53. مركز تدريب مهني</option>
+          <option value="arch_studio">55. استوديو معماري مفتوح</option>
+          <option value="art_studio">56. ورشة فنية / استوديو رسم</option>
+          <option value="pavilion_temp">59. جناح مؤقت لمعرض</option>
+          <option value="pavilion">60. Pavilion معماري مبتكر</option>
+        </optgroup>
+        <optgroup label="── الواجهات والتفاصيل ──">
+          <option value="arabic_facade">3. واجهة معمارية بطابع عربي</option>
+          <option value="neoclassic">4. واجهة نيوكلاسيك سكنية</option>
+          <option value="privacy_facade">34. معالجة الخصوصية في الواجهات</option>
+          <option value="bioclimatic">35. تصميم التهوية والشمس</option>
+          <option value="parametric">36. واجهة Parametric تجارية</option>
+          <option value="interactive_facade">61. واجهة تفاعلية ضوء وظل</option>
+          <option value="concrete_glass">62. واجهة خرسانة وزجاج</option>
+          <option value="brick_facade">63. واجهة طوب مكشوف معاصر</option>
+          <option value="luxury_entry">64. مدخل فخم فندق/برج</option>
+          <option value="lobby_redesign">65. إعادة تصميم لوبي إداري</option>
+        </optgroup>
+        <optgroup label="── التصميم الداخلي ──">
+          <option value="living_int">28. تصميم داخلي غرفة معيشة</option>
+          <option value="exec_office">29. مكتب تنفيذي فاخر</option>
+          <option value="small_kitchen">30. مطبخ عملي مساحة صغيرة</option>
+          <option value="master_bed">31. غرفة نوم ماستر هادئة</option>
+        </optgroup>
+        <optgroup label="── الفراغات الخارجية ──">
+          <option value="landscape">32. لاندسكيب حديقة فيلا</option>
+          <option value="luxury_entrance">33. مدخل فاخر مبنى سكني</option>
+          <option value="roof_garden">66. سطح Roof Garden</option>
+          <option value="compound_spaces">67. فراغات مجمع سكني</option>
+          <option value="plaza">68. Plaza حضرية</option>
+          <option value="shaded_walkway">69. ممرات مظللة بيئة حارة</option>
+        </optgroup>
+        <optgroup label="── المفاهيمي ──">
+          <option value="sustainable">37. مبنى مستدام منخفض الطاقة</option>
+          <option value="grad_board">38. لوحة عرض مشروع تخرج</option>
+          <option value="competition">39. Concept لمسابقة تصميم</option>
+          <option value="brand">40. هوية بصرية معمارية</option>
+          <option value="nature_concept">70. Concept مستوحى من الطبيعة</option>
+          <option value="office15">15. مكتب هندسي صغير احترافي</option>
+          <option value="showroom">16. معرض سيارات أو منتجات</option>
+          <option value="hotel">17. فندق بوتيك صغير</option>
+          <option value="clinic">18. عيادة تخصصية</option>
+          <option value="pharmacy">19. صيدلية بهوية بصرية</option>
+          <option value="cafe">20. كافيه صغير في زاوية</option>
+          <option value="kinder">21b. روضة أطفال ملونة</option>
+          <option value="sport_center">22b. مركز لياقة على دورين</option>
+          <option value="cultural">23b. مركز مجتمعي ثقافي</option>
+          <option value="parking">24b. مبنى جراج متعدد الطوابق</option>
+          <option value="market">25b. سوق شعبي مسقوف</option>
+        </optgroup>
+      </select>
+    </div>
+    <div>
+      <div class="lbl">الأسلوب المعماري</div>
+      <select id="style">
+        <option value="contemporary modern">Contemporary Modern</option>
+        <option value="minimalist pure white">Minimalist</option>
+        <option value="bioclimatic passive">Bioclimatic</option>
+        <option value="industrial raw exposed">Industrial</option>
+        <option value="vernacular Arabic contemporary">Vernacular Arabic</option>
+        <option value="neoclassical refined">Neoclassical</option>
+        <option value="brutalist concrete">Brutalist</option>
+        <option value="parametric algorithmic">Parametric</option>
+      </select>
+    </div>
+  </div>
+  <div class="grid3">
+    <div>
+      <div class="lbl">المساحة</div>
+      <select id="area">
+        <option value="60sqm">60 م²</option>
+        <option value="100sqm">100 م²</option>
+        <option value="300sqm" selected>300 م²</option>
+        <option value="600sqm">600 م²</option>
+        <option value="1000sqm">1000 م²</option>
+        <option value="2000sqm">2000 م²</option>
+      </select>
+    </div>
+    <div>
+      <div class="lbl">نسبة الشاشة</div>
+      <select id="ratio">
+        <option value="3:2">3:2 أفقي</option>
+        <option value="16:9">16:9 سينمائي</option>
+        <option value="2:3">2:3 رأسي A1</option>
+        <option value="1:1">1:1 مربع</option>
+      </select>
+    </div>
+    <div>
+      <div class="lbl">مستوى التفصيل</div>
+      <select id="detail">
+        <option value="full">كامل — مسقط + واجهة + قطاع</option>
+        <option value="plan">مسقط + واجهة فقط</option>
+        <option value="concept">Concept + Render</option>
+      </select>
+    </div>
+  </div>
+  <button class="genbtn" onclick="generate()">← توليد شيت البرومبت المعماري</button>
+</div>
+
+<div class="sheet" id="sheet">
+  <div class="sh-head">
+    <div class="sh-title" id="sh-title">—</div>
+    <div class="sh-meta" id="sh-meta">SCALE 1:100 · MJ v6</div>
+  </div>
+  <div class="sh-body">
+    <div class="drawings">
+      <div class="dbox"><svg id="plan-svg" viewBox="0 0 220 165" width="100%" height="100%"></svg><div class="dlbl">FLOOR PLAN</div><div class="dscl" id="plan-scl">1:100</div></div>
+      <div class="dbox"><svg id="elev-svg" viewBox="0 0 220 165" width="100%" height="100%"></svg><div class="dlbl">MAIN FACADE ELEVATION</div><div class="dscl">1:100</div></div>
+    </div>
+    <div class="pbox"><div class="lbl" style="margin-bottom:10px">MIDJOURNEY PROMPT</div><p id="prompt-text"></p></div>
+    <div class="actions">
+      <button class="copybtn" onclick="copyP()">Copy Prompt</button>
+      <span class="copymsg" id="cmsg">✓ Copied to clipboard</span>
+    </div>
+    <div class="footer"><div class="fsig">Ahmed El-Fouly · المصمم</div><div class="ftag" id="ftag">AEF · ARCHITECTURAL AI PROMPTS</div></div>
+  </div>
+</div>
+</div>
+
+<script>
+const C={
+  wall:'#555',wall2:'#3a3a3a',fill1:'#1e2a22',fill2:'#1a2030',fill3:'#2a1f1a',fill4:'#2a2a1a',fill5:'#1a2a2a',
+  glass:'#1a3a4a',glass2:'#243040',dim:'#888',txt:'#8a8a8a',gold:'#c8a96e',accent:'#2c4a3e'
+};
+
+function rect(x,y,w,h,fill,stroke,sw,dash){
+  let r=document.createElementNS('http://www.w3.org/2000/svg','rect');
+  r.setAttribute('x',x);r.setAttribute('y',y);r.setAttribute('width',w);r.setAttribute('height',h);
+  r.setAttribute('fill',fill||'none');r.setAttribute('stroke',stroke||C.wall);r.setAttribute('stroke-width',sw||0.8);
+  if(dash)r.setAttribute('stroke-dasharray',dash);
+  return r;
+}
+function txt(x,y,t,anchor,size,fill){
+  let e=document.createElementNS('http://www.w3.org/2000/svg','text');
+  e.setAttribute('x',x);e.setAttribute('y',y);e.setAttribute('text-anchor',anchor||'middle');
+  e.setAttribute('font-size',size||6.5);e.setAttribute('fill',fill||C.txt);
+  e.setAttribute('font-family','IBM Plex Mono,monospace');
+  e.textContent=t;return e;
+}
+function line(x1,y1,x2,y2,stroke,sw,dash){
+  let l=document.createElementNS('http://www.w3.org/2000/svg','line');
+  l.setAttribute('x1',x1);l.setAttribute('y1',y1);l.setAttribute('x2',x2);l.setAttribute('y2',y2);
+  l.setAttribute('stroke',stroke||C.dim);l.setAttribute('stroke-width',sw||0.5);
+  if(dash)l.setAttribute('stroke-dasharray',dash);
+  return l;
+}
+function circle(cx,cy,r,fill,stroke){
+  let c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  c.setAttribute('cx',cx);c.setAttribute('cy',cy);c.setAttribute('r',r);
+  c.setAttribute('fill',fill||'none');c.setAttribute('stroke',stroke||C.wall);c.setAttribute('stroke-width',0.6);
+  return c;
+}
+function poly(pts,fill,stroke){
+  let p=document.createElementNS('http://www.w3.org/2000/svg','polygon');
+  p.setAttribute('points',pts);p.setAttribute('fill',fill||'none');p.setAttribute('stroke',stroke||C.wall);
+  p.setAttribute('stroke-width',0.8);return p;
+}
+function ap(svg,...els){els.forEach(e=>svg.appendChild(e))}
+
+const plans={
+  default:(s)=>{
+    ap(s,
+      rect(15,15,190,135,'none',C.wall,1.2),
+      rect(15,15,190,22,C.fill1,C.wall,0.8),
+      txt(110,30,'MAIN HALL / ENTRANCE'),
+      rect(15,37,60,113,C.fill2,C.wall,0.7),
+      txt(45,96,'ZONE A',undefined,6,C.txt),
+      rect(75,37,75,60,C.fill3,C.wall,0.7),
+      txt(112,70,'ZONE B',undefined,6,C.txt),
+      rect(75,97,75,55,C.fill4,C.wall,0.7),
+      txt(112,127,'ZONE C',undefined,6,C.txt),
+      rect(150,37,55,113,C.fill5,C.wall,0.7),
+      txt(177,96,'CORE',undefined,6,C.txt),
+      line(15,148,30,148,C.gold,1.5),
+      txt(22,156,'5m',undefined,6,C.gold)
+    );
+  },
+  narrow_villa:(s)=>{
+    ap(s,
+      rect(60,10,100,145,'none',C.wall,1.2),
+      txt(110,10,'GROUND FLOOR',undefined,5.5,C.dim),
+      rect(60,10,100,35,C.fill1,C.wall,0.7),
+      txt(110,31,'RECEPTION',undefined,6),
+      rect(60,45,45,30,C.fill2,C.wall,0.7),
+      txt(82,63,'LIVING',undefined,6),
+      rect(105,45,55,30,C.fill3,C.wall,0.7),
+      txt(132,63,'DINING/KIT',undefined,5.5),
+      rect(60,75,100,40,C.fill4,C.wall,0.7),
+      txt(110,98,'BEDROOMS x3',undefined,6),
+      rect(60,115,45,40,C.fill5,C.wall,0.7),
+      txt(82,138,'MASTER',undefined,6),
+      rect(105,115,55,40,C.fill1,C.wall,0.7),
+      txt(132,138,'BATHROOMS',undefined,5.5),
+      line(60,152,75,152,C.gold,1.5),
+      txt(67,158,'4m',undefined,6,C.gold)
+    );
+  },
+  hospital:(s)=>{
+    ap(s,
+      rect(10,12,200,140,'none',C.wall,1.2),
+      rect(10,12,65,140,'#1a2a1a',C.wall,0.7),
+      txt(42,50,'CONSULTATION',undefined,5.5),txt(42,60,'ROOMS',undefined,5.5),
+      rect(75,12,55,65,C.fill2,C.wall,0.7),
+      txt(102,47,'WAITING',undefined,6),
+      rect(75,77,55,75,'#1a1a2a',C.wall,0.7),
+      txt(102,117,'MINOR PROC.',undefined,5.5),
+      rect(130,12,80,55,C.fill4,C.wall,0.7),
+      txt(170,42,'NURSES STN',undefined,5.5),
+      rect(130,67,80,85,'#1a2020',C.wall,0.7),
+      txt(170,112,'PHARMACY',undefined,5.5),
+      txt(8,155,'CLEAN',undefined,5,'#4a8a4a'),
+      txt(75,155,'SEMI-CLEAN',undefined,5,'#8a8a4a'),
+      txt(150,155,'SUPPORT',undefined,5,'#8a4a4a'),
+      line(10,148,22,148,C.gold,1.5),
+      txt(16,156,'4m',undefined,6,C.gold)
+    );
+  },
+  mosque:(s)=>{
+    ap(s,
+      rect(10,12,200,140,'none',C.wall,1.2),
+      rect(45,12,130,85,C.fill1,C.wall,0.9),
+      txt(110,57,'PRAYER HALL',undefined,7),
+      txt(110,70,'← QIBLA',undefined,5.5,C.gold),
+      rect(85,12,50,16,'#20201a',C.wall,0.7),
+      txt(110,23,'MIHRAB',undefined,5.5,C.gold),
+      rect(10,12,35,140,'#201a20',C.wall,0.7),
+      txt(27,85,'WOMEN',undefined,5.5),
+      rect(175,12,35,140,'#1a1a20',C.wall,0.7),
+      txt(192,50,'MIN.',undefined,5.5),
+      rect(45,97,130,55,C.fill4,C.wall,0.7),
+      txt(110,127,'ABLUTION + VESTIBULE',undefined,5.5),
+      line(10,148,22,148,C.gold,1.5),
+      txt(16,156,'5m',undefined,6,C.gold)
+    );
+  },
+  school:(s)=>{
+    ap(s,
+      rect(10,12,200,140,'none',C.wall,1.2),
+      rect(10,12,200,20,C.fill1,C.wall,0.7),
+      txt(110,26,'ADMINISTRATION BLOCK'),
+      rect(10,32,90,55,'#1a2a1a',C.wall,0.7),
+      txt(55,62,'CLASSROOMS A',undefined,5.5),
+      rect(120,32,90,55,'#1a2a1a',C.wall,0.7),
+      txt(165,62,'CLASSROOMS B',undefined,5.5),
+      rect(55,87,110,65,C.fill4,C.wall,0.7,'3,2'),
+      txt(110,122,'CENTRAL COURTYARD',undefined,6),
+      line(15,148,27,148,C.gold,1.5),
+      txt(21,156,'5m',undefined,6,C.gold),
+      poly('110,8 106,14 114,14','#c8a96e','none'),
+      txt(110,8,'N',undefined,5,C.gold)
+    );
+  },
+  library:(s)=>{
+    ap(s,
+      rect(15,12,190,140,'none',C.wall,1.2),
+      rect(15,12,190,20,C.fill1,C.wall,0.7),
+      txt(110,26,'ENTRANCE + INFO DESK'),
+      rect(50,52,120,70,C.fill4,C.wall,0.7,'3,2'),
+      txt(110,90,'ATRIUM VOID',undefined,7),
+      rect(15,32,35,120,'#1a2a1a',C.wall,0.7),
+      txt(32,95,'READ',undefined,5.5),
+      rect(170,32,35,120,'#1a1a2a',C.wall,0.7),
+      txt(187,95,'STACKS',undefined,5.5),
+      rect(50,32,120,20,C.fill2,C.wall,0.7),
+      txt(110,45,'LIBRARY COUNTER',undefined,5.5),
+      line(15,148,27,148,C.gold,1.5),
+      txt(21,156,'5m',undefined,6,C.gold)
+    );
+  },
+  mall:(s)=>{
+    ap(s,
+      rect(10,10,200,145,'none',C.wall,1.2),
+      rect(10,10,200,18,C.fill3,C.wall,0.7),
+      txt(110,22,'MAIN STREET FRONTAGE',undefined,5.5,C.gold),
+      rect(85,28,50,125,C.fill4,C.wall,0.7,'3,2'),
+      txt(110,92,'ATRIUM',undefined,7),
+      rect(10,28,75,60,'#1a2030',C.wall,0.7),
+      txt(47,60,'RETAIL R1-R8',undefined,5.5),
+      rect(135,28,75,60,'#1a2030',C.wall,0.7),
+      txt(172,60,'RETAIL R9-R16',undefined,5.5),
+      rect(10,88,75,67,'#1a2a1a',C.wall,0.7),
+      txt(47,124,'FOOD COURT',undefined,5.5),
+      rect(135,88,75,67,'#20201a',C.wall,0.7),
+      txt(172,124,'ANCHOR',undefined,5.5),
+      line(10,150,22,150,C.gold,1.5),
+      txt(16,157,'5m',undefined,6,C.gold)
+    );
+  },
+  restaurant:(s)=>{
+    ap(s,
+      rect(10,12,200,140,'none',C.wall,1.2),
+      rect(10,12,200,18,C.fill3,C.wall,0.7),
+      txt(110,24,'MAIN DINING HALL — 60 COVERS'),
+      rect(10,30,115,90,C.fill1,C.wall,0.7),
+      [45,55,75].forEach(cx=>[50,68,86].forEach(cy=>ap(s,circle(cx,cy,8,'none','#4a5a4a')))),
+      rect(125,30,85,45,C.fill3,C.wall,0.7),
+      txt(167,55,'OPEN KITCHEN',undefined,5.5),
+      rect(125,75,85,45,C.fill2,C.wall,0.7),
+      txt(167,100,'BAR AREA',undefined,5.5),
+      rect(10,120,200,32,C.fill4,C.wall,0.7),
+      txt(110,139,'SERVICE CORRIDOR — STAFF ONLY',undefined,5.5),
+      line(10,30,125,30,'#3a6aaa',0.8,'4,2'),
+      line(110,120,110,152,'#aa3a3a',0.8,'4,2')
+    );
+  },
+  cowork:(s)=>{
+    ap(s,
+      rect(10,12,200,140,'none',C.wall,1.2),
+      rect(10,12,200,20,C.fill2,C.wall,0.7),
+      txt(110,26,'OPEN HOT-DESK ZONE'),
+      rect(10,32,60,120,'#1a2a1a',C.wall,0.7),
+      txt(40,95,'PRIVATE\nOFFICES',undefined,5.5),
+      rect(70,32,85,50,'#20201a',C.wall,0.7),
+      txt(112,60,'COMMUNITY\nKITCHEN',undefined,5.5),
+      rect(70,82,85,70,'#1a1a2a',C.wall,0.7),
+      txt(112,120,'MEETING ROOMS',undefined,5.5),
+      rect(155,32,55,120,C.fill4,C.wall,0.7),
+      txt(182,95,'PHONE\nBOOTHS',undefined,5.5),
+      line(10,148,22,148,C.gold,1.5),
+      txt(16,156,'4m',undefined,6,C.gold)
+    );
+  },
+  villa_courtyard:(s)=>{
+    ap(s,
+      rect(10,10,200,145,'none',C.wall,1.2),
+      rect(10,10,200,22,'#201a10',C.wall,0.7),
+      txt(110,25,'ALL ROOMS FACE INWARD — PRIVACY STREET WALL'),
+      rect(60,50,100,75,C.fill4,C.wall,0.8,'4,2'),
+      txt(110,90,'CENTRAL COURTYARD',undefined,7),
+      rect(10,32,50,123,'#1a2a1a',C.wall,0.7),
+      txt(35,97,'LIVING\nDINING',undefined,5.5),
+      rect(160,32,50,123,'#1a1a2a',C.wall,0.7),
+      txt(185,97,'BEDROOMS',undefined,5.5),
+      rect(60,32,100,18,C.fill2,C.wall,0.7),
+      txt(110,44,'ENTRANCE VESTIBULE'),
+      rect(60,125,100,30,C.fill3,C.wall,0.7),
+      txt(110,143,'SERVICE ZONE'),
+      line(10,148,22,148,C.gold,1.5),
+      txt(16,157,'5m',undefined,6,C.gold)
+    );
+  }
+};
+
+const elevs={
+  default:(s)=>{
+    ap(s,
+      line(5,140,215,140,C.dim,0.8),
+      rect(20,55,180,85,C.fill1,C.wall,1.2),
+      rect(20,35,180,20,C.fill2,C.wall,0.8),
+      rect(50,55,130,85,C.glass,C.wall,0.8),
+      rect(20,55,30,85,C.fill3,C.wall,0.6),
+      rect(170,55,30,85,C.fill3,C.wall,0.6),
+      line(80,55,80,140,C.wall,0.4),
+      line(110,55,110,140,C.wall,0.4),
+      line(140,55,140,140,C.wall,0.4),
+      rect(80,110,60,30,C.fill4,C.wall,0.8),
+      txt(110,128,'MAIN ENTRANCE',undefined,5.5),
+      txt(110,155,'MAIN FACADE ELEVATION — SCALE 1:100')
+    );
+  },
+  narrow_villa:(s)=>{
+    ap(s,
+      line(5,145,215,145,C.dim,0.8),
+      rect(60,30,100,115,'none',C.wall,1.2),
+      rect(60,30,100,55,C.fill2,C.wall,0.7),
+      rect(65,35,90,45,C.glass,C.wall,0.6),
+      rect(60,85,100,60,C.fill1,C.wall,0.7),
+      rect(65,90,40,50,C.glass,C.wall,0.6),
+      rect(108,90,45,50,C.glass,C.wall,0.6),
+      rect(60,80,100,5,C.fill4,C.wall,0),
+      txt(110,78,'FF SLAB',undefined,5,C.dim),
+      line(60,80,55,80,C.dim,0.5),
+      rect(75,118,50,27,C.fill3,C.wall,0.8),
+      txt(110,134,'ENTRANCE'),
+      txt(110,155,'FRONT ELEVATION — NARROW VILLA — 1:100')
+    );
+  },
+  mosque:(s)=>{
+    ap(s,
+      line(5,140,215,140,C.dim,0.8),
+      rect(30,65,160,75,C.fill1,C.wall,1.2),
+      poly('110,20 155,65 65,65',C.fill4,C.wall),
+      rect(160,15,22,125,C.fill2,C.wall,1),
+      poly('171,8 177,15 165,15',C.fill3,C.wall),
+      rect(40,80,35,60,C.glass,C.wall,0.6),
+      rect(85,80,50,60,C.glass,C.wall,0.6),
+      rect(145,80,30,60,C.glass,C.wall,0.6),
+      rect(85,110,50,30,C.fill3,C.wall,0.8),
+      txt(110,127,'MAIN ENTRANCE',undefined,5.5),
+      txt(110,155,'QIBLA FACADE — SCALE 1:150')
+    );
+  },
+  school:(s)=>{
+    ap(s,
+      line(5,140,215,140,C.dim,0.8),
+      rect(15,70,190,70,C.fill1,C.wall,1.2),
+      rect(80,50,60,90,C.fill4,C.wall,1),
+      rect(30,85,45,10,'#2a4a2a',C.wall,0.5),
+      txt(52,93,'CANOPY',undefined,5.5),
+      rect(25,75,35,65,C.glass,C.wall,0.6),
+      rect(70,75,25,65,C.glass,C.wall,0.6),
+      rect(120,75,25,65,C.glass,C.wall,0.6),
+      rect(150,75,35,65,C.glass,C.wall,0.6),
+      rect(88,105,44,35,C.fill3,C.wall,0.8),
+      txt(110,127,'MAIN ENTRANCE'),
+      txt(110,155,'MAIN FACADE — SCHOOL — 1:100')
+    );
+  },
+  hospital:(s)=>{
+    ap(s,
+      line(5,140,215,140,C.dim,0.8),
+      rect(15,45,190,95,C.fill1,C.wall,1.2),
+      rect(15,45,190,12,'#1a2a1a',C.wall,0.5),
+      txt(110,54,'MEDICAL CENTER — FASCIA BAND',undefined,5.5,C.gold),
+      rect(30,57,28,83,C.glass,C.wall,0.6),
+      rect(75,57,65,83,C.glass,C.wall,0.6),
+      rect(150,57,30,83,C.glass,C.wall,0.6),
+      rect(90,110,40,30,C.fill3,C.wall,0.8),
+      txt(110,127,'ENTRANCE',undefined,5.5),
+      txt(110,155,'MAIN FACADE — MEDICAL CENTER — 1:100')
+    );
+  },
+  library:(s)=>{
+    ap(s,
+      line(5,140,215,140,C.dim,0.8),
+      rect(20,55,180,85,C.fill1,C.wall,1.2),
+      rect(65,35,90,105,C.fill4,C.wall,0.9),
+      rect(70,40,80,35,C.glass2,C.wall,0.6),
+      txt(110,60,'SKYLIGHT',undefined,5.5,C.gold),
+      rect(25,70,40,70,C.glass,C.wall,0.6),
+      rect(80,80,60,60,C.glass,C.wall,0.6),
+      rect(155,70,35,70,C.glass,C.wall,0.6),
+      rect(80,110,60,30,C.fill3,C.wall,0.8),
+      txt(110,128,'ENTRANCE CANOPY'),
+      txt(110,155,'MAIN FACADE — LIBRARY — 1:100')
+    );
+  },
+  mall:(s)=>{
+    ap(s,
+      line(5,140,215,140,C.dim,0.8),
+      rect(15,35,190,105,C.fill1,C.wall,1.2),
+      rect(15,35,190,10,'#201a10',C.wall,0),
+      txt(110,43,'MAIN STREET FACADE',undefined,5.5,C.gold),
+      rect(30,45,25,95,C.glass,C.wall,0.6),
+      rect(65,45,25,95,C.glass,C.wall,0.6),
+      rect(80,45,60,95,'#1a3a5a',C.wall,0.8),
+      txt(110,95,'MALL ENTRANCE',undefined,5.5,C.gold),
+      rect(150,45,25,95,C.glass,C.wall,0.6),
+      rect(180,45,20,95,C.fill3,C.wall,0.6),
+      txt(110,155,'STREET FACADE — RETAIL MALL — 1:200')
+    );
+  },
+  restaurant:(s)=>{
+    ap(s,
+      line(5,140,215,140,C.dim,0.8),
+      rect(20,55,180,85,C.fill1,C.wall,1.2),
+      rect(20,55,180,8,C.fill3,C.wall,0),
+      rect(30,63,160,77,C.glass,C.wall,0.8),
+      rect(20,63,10,77,C.fill4,C.wall,0.6),
+      rect(190,63,10,77,C.fill4,C.wall,0.6),
+      line(90,63,90,140,C.wall,0.5),
+      line(130,63,130,140,C.wall,0.5),
+      rect(82,108,56,32,C.fill3,C.wall,0.8),
+      txt(110,127,'ENTRANCE',undefined,5.5),
+      txt(110,155,'MAIN FACADE ELEVATION — RESTAURANT — 1:100')
+    );
+  },
+  cowork:(s)=>{
+    ap(s,
+      line(5,140,215,140,C.dim,0.8),
+      rect(15,30,190,110,C.fill1,C.wall,1.2),
+      rect(30,30,160,110,'#1a3a5a',C.wall,0.8),
+      rect(15,30,15,110,C.fill4,C.wall,0.6),
+      rect(190,30,15,110,C.fill4,C.wall,0.6),
+      line(80,30,80,140,C.wall,0.4),line(120,30,120,140,C.wall,0.4),
+      rect(15,20,190,10,C.fill3,C.wall,0),
+      txt(110,28,'COWORKING — STREET LEVEL ACTIVATION',undefined,5.5,C.gold),
+      rect(78,108,54,32,C.fill1,C.wall,0.8),
+      txt(110,127,'MEMBER ENTRANCE'),
+      txt(110,155,'STREET FACADE — COWORKING — 1:100')
+    );
+  },
+  villa_courtyard:(s)=>{
+    ap(s,
+      line(5,140,215,140,C.dim,0.8),
+      rect(20,45,180,95,C.fill1,C.wall,1.2),
+      rect(20,45,180,10,'#20180a',C.wall,0),
+      rect(25,55,50,85,C.fill3,C.wall,0.7),
+      rect(80,55,60,85,C.fill4,C.wall,0.7,'3,2'),
+      txt(110,100,'COURTYARD',undefined,6,C.dim),
+      rect(145,55,50,85,C.fill3,C.wall,0.7),
+      rect(28,60,44,30,C.glass,C.wall,0.5),
+      rect(148,60,44,30,C.glass,C.wall,0.5),
+      txt(110,43,'STREET WALL — NO DIRECT OPENINGS',undefined,5.5,C.gold),
+      txt(110,155,'STREET FACADE — COURTYARD HOUSE — 1:100')
+    );
+  }
+};
+
+const DB={
+  narrow_villa:{t:'NARROW-PLOT VILLA — ARCHITECTURAL DESIGN SHEET',p:(a,st,d,r)=>`Architectural design sheet modern narrow-plot villa, ${a}, 8x20m rectangular footprint, two floors. Floor plan: entrance hall, open living-dining, kitchen with service door, 3 bedrooms, 2 bathrooms, staircase. Facade elevation: ${st} — floor-to-ceiling glass panels, cantilevered upper floor, clean white and dark grey cladding. Dimensions labeled, north arrow, scale bar. ${d==='full'?'Side elevation + roof plan.':''} Signed: Ahmed El-Fouly Architect. Professional CAD linework, black on white --ar ${r} --style raw --v 6`},
+  eco_house:{t:'ECONOMICAL FAMILY HOUSE — FLOOR PLAN SHEET',p:(a,st,d,r)=>`Architectural floor plan economical family house, ${a}, single storey. Efficient layout: entrance hall, open living-dining, small kitchen, 3 bedrooms, 2 bathrooms, storage. ${st} facade elevation. Room dimensions labeled, furniture symbols, north arrow, scale 1:100. ${d==='full'?'Section + material cost table.':''} Signed: Ahmed El-Fouly Architect. Clean technical drawing, black linework on white --ar ${r} --style raw --v 6`},
+  arabic_facade:{t:'MODERN ARABIC-STYLE FACADE — ELEVATION SHEET',p:(a,st,d,r)=>`Architectural elevation drawing modern Arabic-style residential facade, ${a}, 3 floors. Geometric mashrabiya screen panels laser-cut steel, arched entrance portal with muqarnas detail, warm beige stone cladding, deep window reveals. ${st} expression. Material callouts, shadow depth indicated, scale bar. ${d==='full'?'Detail panel of mashrabiya geometry.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  neoclassic:{t:'NEOCLASSICAL RESIDENTIAL BUILDING — ELEVATION',p:(a,st,d,r)=>`Neoclassical residential building elevation, ${a}, 5 floors, symmetrical. Corinthian pilasters, decorative cornices per floor, rusticated base, arched windows with keystones, balconies with iron balustrades, ornate entrance with pediment. Precise architectural elevation, stone texture, shadow lines, scale bar. ${d==='full'?'Capital detail drawing + section.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  office:{t:'SMALL OFFICE BUILDING — ARCHITECTURAL DESIGN SHEET',p:(a,st,d,r)=>`Architectural design sheet small office building, ${a}, 4 floors. Ground floor plan: lobby, open workspace, meeting rooms, staircore, bathrooms. Main facade elevation: ${st} — curtain wall glazing, aluminum cladding, recessed entrance canopy, signage zone. Material legend, scale bar, north arrow. ${d==='full'?'Typical upper floor + section through core.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  school:{t:'PRIMARY SCHOOL — ARCHITECTURAL DESIGN SHEET',p:(a,st,d,r)=>`Primary school architectural site plan and elevation sheet, ${a}. Site plan: separate student entrance, vehicle drop-off zone, classrooms wings, administration, central courtyard, playground — circulation color-coded. Main facade: ${st} — colorful canopy, child-scale entrance, classroom windows. ${d==='full'?'Classroom detail + section through courtyard.':''} Signed: Ahmed El-Fouly Architect. Technical drawing, scale bar --ar ${r} --style raw --v 6`},
+  hospital:{t:'SMALL MEDICAL CENTER — ARCHITECTURAL DESIGN SHEET',p:(a,st,d,r)=>`Small medical center floor plan, ${a}, single floor. Clean zone (consultation, treatment), semi-clean (nurses station, waiting), dirty zone (service, waste) — color-coded. Separate patient/staff entrances, 6 consultation rooms, minor procedures, pharmacy. Main facade elevation: ${st}. ${d==='full'?'Section + room data schedule.':''} Signed: Ahmed El-Fouly Architect. Scale 1:200 --ar ${r} --style raw --v 6`},
+  mosque:{t:'URBAN MOSQUE — ARCHITECTURAL DESIGN SHEET',p:(a,st,d,r)=>`Mosque architectural design sheet, ${a}, capacity 200. Floor plan: prayer hall with qibla wall, ablution areas by gender, entrance vestibule, minaret base. Section elevation: domed roof with central oculus skylight, clerestory windows, natural light rays annotated. Facade: ${st}. ${d==='full'?'Geometric ornament detail + site plan.':''} Signed: Ahmed El-Fouly Architect. Qibla direction arrow, scale bar --ar ${r} --style raw --v 6`},
+  apt:{t:'TYPICAL APARTMENT FLOOR — ARCHITECTURAL SHEET',p:(a,st,d,r)=>`Typical floor plan residential apartment building, ${a}, 4 units per floor around central core. Each apartment: 90sqm, 2 bedrooms, living-dining, kitchen, 2 bathrooms, balcony. ${st} facade. Structural grid in grey, boundaries in black, furniture in light grey, fire escape routes. Scale 1:150. ${d==='full'?'Ground floor entrance plan + section.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  duplex:{t:'DUPLEX VILLA — ZONE SEPARATION SHEET',p:(a,st,d,r)=>`Duplex villa architectural design sheet, ${a}. Ground floor: public zone — formal reception, guest majlis, guest bathroom, kitchen. First floor: private zone — master suite, 2 children bedrooms, family lounge. Staircase separating zones. Front elevation: ${st} two-storey facade with balcony. Zone labels, scale bar. ${d==='full'?'Section through stair + site plan.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  rural:{t:'CONTEMPORARY RURAL HOUSE — DESIGN SHEET',p:(a,st,d,r)=>`Contemporary rural house design sheet, ${a}. Floor plan: open plan living-kitchen, 2 bedrooms, covered veranda wrapping two sides. Elevations: ${st} — pitched metal roof over flat concrete base, exposed stone lower walls, timber-framed windows, deep overhanging eaves. Material palette annotated, scale bar. ${d==='full'?'Section + landscape plan.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  coastal:{t:'COASTAL CHALET — ARCHITECTURAL DESIGN SHEET',p:(a,st,d,r)=>`Coastal chalet architectural design sheet, ${a}. Floor plan: open living-dining facing sea, full-width sliding glass doors, wraparound deck, 2 bedrooms, outdoor shower. Elevation: ${st} — fully glazed sea-facing facade, horizontal timber louvers, elevated on pilotis. Wind and sun orientation. ${d==='full'?'Section + deck detail.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  cabin:{t:'MOUNTAIN CABIN — ARCHITECTURAL DESIGN SHEET',p:(a,st,d,r)=>`Mountain cabin architectural sheet, ${a}, 60sqm. Floor plan: single room with sleeping loft, wood-burning fireplace, kitchen alcove, bathroom, covered entrance porch. Elevations: ${st} — steep pitched roof for snow load, rough stone base, rough-sawn timber upper walls, stone chimney. Section showing loft. Material callouts: local stone, larch timber, zinc roof. ${d==='full'?'Construction detail at eaves.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  tiny:{t:'TINY HOUSE — ARCHITECTURAL DESIGN SHEET',p:(a,st,d,r)=>`Tiny house design sheet, ${a}, 25sqm on trailer. Floor plan: compact kitchen, fold-down dining, sofa-bed, bathroom with composting toilet, under-stair storage, sleeping loft. Four elevations: ${st} — corrugated metal cladding, large pivot window, rooftop solar panels. Interior perspective inset. Storage zones highlighted. ${d==='full'?'Storage detail + section.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  office15:{t:'SMALL ENGINEERING OFFICE — DESIGN SHEET',p:(a,st,d,r)=>`Small engineering office interior and exterior design sheet, ${a}. Floor plan: drafting studio, model-making zone, meeting room, reception, material library. Facade elevation: ${st} — glazed studio front, professional signage, entrance canopy. Interior perspective: exposed ceiling, large worktables, pin-up wall. ${d==='full'?'Reflected ceiling plan + section.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  showroom:{t:'PRODUCT SHOWROOM — ARCHITECTURAL SHEET',p:(a,st,d,r)=>`Showroom architectural design sheet, ${a}. Floor plan: display floor with product zones, feature display platform at center, reception and cashier, storage room, staff area. Facade elevation: ${st} — double-height glazed showroom front, brand signage zone, track lighting visible inside. ${d==='full'?'Lighting plan + interior perspective.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  hotel:{t:'BOUTIQUE HOTEL — ARCHITECTURAL DESIGN SHEET',p:(a,st,d,r)=>`Boutique hotel architectural design sheet, ${a}. Ground floor: reception with feature desk, lounge bar, breakfast room, courtyard access. Typical floor: 8 rooms with ensuite, corridor, linen room. Facade elevation: ${st} — boutique scale, quality materials, canopied entrance. ${d==='full'?'Typical room plan + section.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  clinic:{t:'SPECIALIST CLINIC — ARCHITECTURAL DESIGN SHEET',p:(a,st,d,r)=>`Specialist medical clinic design sheet, ${a}. Floor plan: reception and waiting, 4 consultation rooms, procedure room, sterilization room, staff room, accessible toilet. Facade elevation: ${st} — clean clinical aesthetic, clear signage, accessible ramp. ${d==='full'?'Room data schedule + infection control flow.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  pharmacy:{t:'PHARMACY — ARCHITECTURAL DESIGN SHEET',p:(a,st,d,r)=>`Pharmacy interior and facade design sheet, ${a}. Floor plan: public dispensing zone, prescription counter, waiting area, stock room, cold storage, consultation booth. Facade: ${st} — branded identity, clear visibility, illuminated signage. Interior perspective: clean shelving, pharmacy counter. ${d==='full'?'Shelving plan + lighting layout.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  cafe:{t:'CORNER CAFE — ARCHITECTURAL DESIGN SHEET',p:(a,st,d,r)=>`Corner cafe architectural design sheet, ${a}. Floor plan: bar counter with coffee equipment, indoor seating 20 covers, outdoor terrace 8 covers, prep kitchen, cold storage, WC. Facade: ${st} — corner glazing, fold-back windows, branded awning. Interior perspective: warm lighting, timber joinery. ${d==='full'?'Bar counter detail + section.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  studio_apt:{t:'SMART STUDIO APARTMENT — DESIGN SHEET',p:(a,st,d,r)=>`Smart studio apartment design sheet, ${a}, 35sqm. Floor plan: sleeping alcove, living-dining, kitchenette, bathroom — all zones marked. Transformation diagrams: daytime working, evening living, night sleeping modes — fold-down bed, extending table. Storage strategy section: built-in wardrobe, under-bed drawers. Feature wall elevation. Material palette: light oak, white, dark contrast kitchen. ${d==='full'?'Area utilization table.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  penthouse:{t:'PENTHOUSE WITH PRIVATE ROOFTOP — DESIGN SHEET',p:(a,st,d,r)=>`Penthouse architectural design sheet, ${a}. Lower floor: open-plan living-dining-kitchen with panoramic glazing, master suite with spa bathroom, guest bedroom. Upper roof: private terrace with plunge pool, outdoor kitchen, lounge deck, planted privacy screen. Section: double-height living, roof terrace structure. Facade: ${st} — glass and steel, cantilevered terrace. ${d==='full'?'Roof waterproofing detail.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  villa_courtyard:{t:'COURTYARD HOUSE — ARCHITECTURAL DESIGN SHEET',p:(a,st,d,r)=>`Courtyard house architectural design sheet, ${a}. All rooms oriented inward, living-dining opening fully to courtyard, bedrooms upper level balcony. Perimeter wall to street — no direct overlooking. Section: thermal buffer diagram, hot air rising, cool air at planted floor. Street facade: solid wall, recessed entrance. Interior courtyard elevation: rhythm of columns, planting, water feature. ${d==='full'?'Daylight analysis inset.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  desert_house:{t:'DESERT CLIMATE HOUSE — DESIGN SHEET',p:(a,st,d,r)=>`Desert climate-responsive house design sheet, ${a}. Compact plan, rooms around shaded courtyard, wind tower marked, thick walls 600mm annotated, minimal east-west openings. Section: wind catcher tower detail — intake, downdraft, room distribution. Wall construction detail: rammed earth, air gap, insulated inner. Facade: ${st} — earth-colored render, deep-set windows, shaded loggia. Sun path diagram summer solstice. ${d==='full'?'Passive cooling strategy table.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  mountain_house:{t:'MOUNTAIN HOUSE ON SLOPE — DESIGN SHEET',p:(a,st,d,r)=>`Mountain house on sloped terrain design sheet, ${a}. Site section: natural slope, cut-and-fill, retaining walls. Multi-level plan: entry at mid-level, living cantilevered over slope, bedrooms embedded in hillside. Section: bored pile foundations, cantilevered steel frame, green roof. Downhill facade: ${st} — full-height glazing, timber and stone. ${d==='full'?'Structural strategy diagram.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  sea_house:{t:'SEA-VIEW PANORAMIC HOUSE — DESIGN SHEET',p:(a,st,d,r)=>`Sea-view panoramic house design sheet, ${a}. Linear plan: all living spaces behind full-height glazing on sea side, master suite with terrace, service on landward side. Solar shading analysis: overhanging roof calculated for summer/winter sun. Facade: ${st} — frameless glazing, cantilevered terrace, infinity pool. View corridor diagram. ${d==='full'?'Privacy analysis from neighbors.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  garden_house:{t:'HOUSE WITH INTERNAL GARDEN — DESIGN SHEET',p:(a,st,d,r)=>`House with internal garden and wide glazing design sheet, ${a}. L-shaped plan wrapping internal garden, living with full sliding glass wall, kitchen with herb garden. Section: internal garden as light well, glass roof over garden, rainwater harvesting. Street facade: ${st} — solid and private. Garden elevation: sliding panels, timber frame, planters. ${d==='full'?'Glass specification schedule.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  expandable:{t:'EXPANDABLE RESIDENTIAL UNIT — DESIGN SHEET',p:(a,st,d,r)=>`Future-expandable residential unit design sheet, ${a}. Phase 1 plan: starter 80sqm. Phase 2 overlay: horizontal extension. Phase 3: vertical upper floor. Structural strategy: foundation sized for full build-out, column stubs, service risers oversized. Facade: ${st} — Phase 1 and Phase 3 elevation comparison. Connection detail: upper floor bearing. ${d==='full'?'Cost and timeline table by phase.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  workers:{t:'STAFF ACCOMMODATION — ECONOMIC DESIGN SHEET',p:(a,st,d,r)=>`Economic workers accommodation design sheet, ${a}. Site plan: blocks for ventilation, central facilities, security gatehouse. Typical block floor plan: single and double rooms, shared bathrooms per 8, common room, laundry. Room layout 1:20: bed, desk, storage. Section: cross-ventilation, lightweight roof. Facade: ${st} — modular precast panels. ${d==='full'?'Cost-per-bed estimate.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  privacy:{t:'HIGH-PRIVACY RESIDENTIAL BUILDING — DESIGN SHEET',p:(a,st,d,r)=>`High-privacy residential building design sheet, ${a}. Floor plan: bedrooms on quiet courtyard side, living on street with screen strategy. Facade: privacy analysis — view angles from street shown, window positions avoiding overlooking. Screen options: perforated metal, angled fins, frosted glass. Section: window height at 1200mm sill. ${d==='full'?'Solar and privacy combined diagram.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  mixed:{t:'MIXED-USE BUILDING — ARCHITECTURAL DESIGN SHEET',p:(a,st,d,r)=>`Mixed-use building design sheet, ${a}, 8 floors. Ground/mezzanine: retail and F&B double-height. Floors 3-8: residential. Floor plan matrix: ground + typical residential. Facade: ${st} — transparent commercial base, residential with balconies, vertical green wall separating zones. Section showing zoning. ${d==='full'?'Area schedule table.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  flex_office:{t:'FLEXIBLE OFFICE BUILDING — DESIGN SHEET',p:(a,st,d,r)=>`Flexible office floor plan, ${a}, 800sqm. Three configurations side by side: A — open plan 60 desks, B — team pods + collaboration, C — private offices + meeting rooms. Structural grid fixed, service core fixed. Facade: ${st} — modular glazing. ${d==='full'?'Flexibility diagram with legend.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  living_int:{t:'MODERN LIVING ROOM — INTERIOR DESIGN SHEET',p:(a,st,d,r)=>`Modern living room interior design sheet, ${a}, 5x7m. Floor plan: L-sofa, coffee table, TV wall, accent chair, rug zone. Three perspectives: TV wall (floating shelving, LED cove), window wall (floor-ceiling drapes, reading nook), dining connection. Material board: warm oak veneer, off-white walls, charcoal upholstery, brass, large format tile. ${d==='full'?'Lighting plan + FF&E schedule.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  exec_office:{t:'EXECUTIVE OFFICE — INTERIOR DESIGN SHEET',p:(a,st,d,r)=>`Executive office interior design sheet, ${a}, 6x8m. Floor plan: large desk with credenza, conference table for 4, lounge seating, private bathroom. Three perspectives: main desk (walnut panel, city view), lounge corner (leather armchairs, art), entrance (reception desk, marble floor). Dark palette: dark walnut, charcoal marble, brushed gold, deep green. ${d==='full'?'Material schedule + lighting plan.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  small_kitchen:{t:'SMALL KITCHEN — INTERIOR DESIGN SHEET',p:(a,st,d,r)=>`Small kitchen interior design sheet, ${a}, 3x4m galley. Plan: work triangle (sink, hob, fridge), upper/lower cabinets, peninsula with 2 bar stools. Three perspectives: cooking wall (handleless cabinets, subway tile), peninsula view (open shelving), storage detail. Palette: white gloss upper, oak lower, quartz worktop, matte black tapware. ${d==='full'?'Cabinet elevation drawings.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  master_bed:{t:'MASTER BEDROOM — INTERIOR DESIGN SHEET',p:(a,st,d,r)=>`Master bedroom interior design sheet, ${a}, 4x5m. Plan: king bed on feature wall, wardrobes, ensuite door, window seat. Three perspectives: bed wall (upholstered headboard, soft lighting), wardrobe alcove (open shelving, full mirror), window corner (morning light). Palette: dusty sage, warm linen, natural oak, matte cream, terracotta. ${d==='full'?'Wardrobe internal layout.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  landscape:{t:'VILLA LANDSCAPE — DESIGN SHEET',p:(a,st,d,r)=>`Villa landscape design sheet, ${a}. Site plan: swimming pool with sun deck, outdoor dining pergola, lawn, service path, planting zones, water feature, lighting overlay. Three perspectives: pool terrace, entrance path, evening mood. Plant palette: species names, textures, seasonal color. Materials: travertine, teak decking, limestone. ${d==='full'?'Irrigation plan + lighting circuit.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  luxury_entrance:{t:'LUXURY RESIDENTIAL ENTRANCE — DESIGN SHEET',p:(a,st,d,r)=>`Luxury residential entrance architectural design sheet, ${a}. Plan: canopy footprint, lobby vestibule, concierge desk, elevator lobby, mailboxes. Elevation: monumental portal 4x5m, backlit onyx feature wall, brass lettering, automated glass doors, fountains. Night perspective inset. Materials: travertine, dark bronze, backlit onyx. ${d==='full'?'Lighting strategy plan.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  privacy_facade:{t:'PRIVACY FACADE DESIGN — COMPARATIVE SHEET',p:(a,st,d,r)=>`Architectural privacy facade design sheet, ${a}. Elevation comparison: standard glazed (problem shown) vs proposed solution — vertical stone fins 45°, perforated metal screens, strategic windows. Plan detail showing fin geometry blocking sightlines. Section: viewing angle analysis. Material options: perforated cor-ten, laser-cut aluminum, ceramic brise-soleil. ${d==='full'?'Wind and light performance charts.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  bioclimatic:{t:'BIOCLIMATIC DESIGN ANALYSIS — ARCHITECTURAL SHEET',p:(a,st,d,r)=>`Bioclimatic architectural design analysis sheet, ${a}. Floor plan with solar and wind overlays: sun path arc, shadow zones at solstices, cross-ventilation arrows. Section: stack ventilation through atrium, roof monitor. Facade strategy: deep brise-soleil south, maximum glazing north. ${d==='full'?'Energy performance graph.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  parametric:{t:'PARAMETRIC FACADE — COMMERCIAL BUILDING SHEET',p:(a,st,d,r)=>`Parametric facade design sheet, ${a}. Main elevation: algorithmic triangulated aluminum panels, density gradient solid to perforated responding to sun analysis, each angle annotated. Axonometric panel depth variation. Panel fabrication: types A/B/C with dimension table. Structural attachment detail. CNC cut aluminum 3mm, powder coated anthracite. Night view inset. ${d==='full'?'BMS integration schematic.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  sustainable:{t:'SUSTAINABLE LOW-ENERGY BUILDING — DESIGN SHEET',p:(a,st,d,r)=>`Sustainable low-energy building design sheet, ${a}. Plan: passive solar orientation, thermal mass walls, natural ventilation, green roof. Facade: triple-glazed south windows, timber brise-soleil, PV panel band, rainwater collection. Strategy diagram: energy flow arrows, carbon label A+. Materials: rammed earth, recycled steel, bio-insulation, FSC timber. ${d==='full'?'Energy model diagram.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  grad_board:{t:'GRADUATION PROJECT PRESENTATION BOARD — A1',p:(a,st,d,r)=>`Professional graduation project architectural presentation board, ${a}, A1 portrait. Layout: project title and concept top center, site analysis top left, concept diagrams top right, ground floor plan center-left, upper floor center-right, main elevation bottom-left, section bottom-center, 3D perspective bottom-right, material palette strip bottom edge. ${st} graphic style. Scale bars, north arrows on all drawings. Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  competition:{t:'COMPETITION CONCEPT BOARD — ARCHITECTURAL SHEET',p:(a,st,d,r)=>`Architectural competition concept board, ${a}. Bold form generation sketch top showing idea origin. Main perspective rendering center: striking exterior, dramatic sky, human figures. Bottom strip: site plan, ground floor, key section, concept model photo. ${st} — high contrast, expressive linework, unconventional composition. Single accent color. Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  brand:{t:'ARCHITECTURAL VISUAL IDENTITY — DESIGN SHEET',p:(a,st,d,r)=>`Real estate project visual identity design sheet, ${a}. Logo variations: primary, monogram, icon on white and dark. Brand color palette: 3 primary + 2 secondary with hex codes. Typography: heading + body font hierarchy. Applied to architecture: building facade using brand colors, project signage, wayfinding, sales brochure cover. ${st}. Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  library:{t:'PUBLIC LIBRARY — ARCHITECTURAL DESIGN SHEET',p:(a,st,d,r)=>`Public library architectural design sheet, ${a}, central atrium. Floor plan: entrance foyer, central void with skylight, reading zones radiating outward, children section, librarian station. Section through atrium: top-lit roof monitor, mezzanine reading gallery, structural steel skylight. Facade: ${st} — solid masonry, ribbon clerestory, glazed entrance canopy. Material palette: stone, timber, frosted glass. ${d==='full'?'Reflected ceiling plan showing skylight geometry.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  youth:{t:'YOUTH CULTURAL CENTER — ARCHITECTURAL DESIGN SHEET',p:(a,st,d,r)=>`Youth cultural center design sheet, ${a}. Site plan: public plaza, amphitheater, skate zone. Floor plan: flexible hall with operable partitions, recording studio, digital fab lab, cafe lounge, rooftop terrace by open stair. Section: double-height hall, exposed steel truss, mezzanine. Facade: ${st} — perforated metal, graphic mural zone, cantilevered canopy. ${d==='full'?'Roof plan + structural axonometric.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  conference:{t:'MULTI-USE CONFERENCE HALL — DESIGN SHEET',p:(a,st,d,r)=>`Multi-use conference hall design sheet, ${a}. Floor plan: main hall with movable acoustic partitions into 3 rooms, pre-function foyer, breakout rooms, AV control, catering pantry. Section: raked floor, acoustic baffles, stage platform, lighting grid. Reflected ceiling: acoustic panels, speaker positions. Facade: ${st}. Furniture in both full and divided config. ${d==='full'?'Acoustic performance diagram.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  fuel:{t:'MODERN FUEL STATION — ARCHITECTURAL DESIGN SHEET',p:(a,st,d,r)=>`Modern fuel station design sheet, ${a}. Site plan: pump island with one-way flow, car wash, LPG zone with safety distance, parking. Services building: convenience store, quick-service cafe, toilets, prayer room, staff office. Canopy structural plan: steel column grid, tension cable roof. Elevation: ${st} — sleek canopy, glazed store, signage zone. Canopy PV integration detail. ${d==='full'?'Section through canopy + drainage.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  firestation:{t:'FIRE AND RESCUE STATION — ARCHITECTURAL DESIGN SHEET',p:(a,st,d,r)=>`Fire and rescue station design sheet, ${a}. Ground floor: apparatus bay for 3 trucks, hose drying tower, turnout gear lockers, watch room with street view, fitness room, briefing room. Upper: dormitory with response poles, lockers, common room. Site: training yard, drill tower. Section: apparatus bay — clear height, exhaust extraction. Facade: ${st} — glazed watch room, bold station number, red accent. ${d==='full'?'Apparatus bay door detail.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  police:{t:'SMALL POLICE STATION — SECURITY ZONING SHEET',p:(a,st,d,r)=>`Small police station design sheet, ${a}. Color-coded plan: public zone (waiting, front desk), semi-secure (interview rooms, offices), secure zone (cells, evidence, armory) — access control at each boundary. Site: separate public/operational vehicle entrances. Section: holding cells, reinforced walls, high clerestory light. Facade: ${st} — solid masonry, minimal fenestration, camera positions. ${d==='full'?'Security circulation diagram.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  bus:{t:'URBAN BUS TERMINAL — ARCHITECTURAL DESIGN SHEET',p:(a,st,d,r)=>`Urban bus terminal design sheet, ${a}. Site: numbered bus bays with pull-in/out lanes, taxi zone, pedestrian crossings, kiss-and-ride. Terminal building: concourse, ticketing, waiting hall, commercial kiosks, facilities, prayer room. Platform canopy: steel columns, tensile membrane. Section: canopy clearance for double-deck buses. Facade: ${st} — transparent waiting hall, wayfinding system. ${d==='full'?'Platform safety screen detail.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  sports:{t:'COMPACT SPORTS CLUB — ARCHITECTURAL DESIGN SHEET',p:(a,st,d,r)=>`Compact sports club design sheet, ${a}. Ground: reception, pro shop, cardio/weights floor, juice bar. First floor: group exercise studio, spinning room, changing rooms with lockers. Rooftop: outdoor terrace with turf. Section: double-height gym, mezzanine cardio deck. Facade: ${st} — large glazed panels showing activity, vertical cladding, blade sign. ${d==='full'?'Area schedule + section.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  sports_hall:{t:'INDOOR MULTI-ACTIVITY SPORTS HALL — DESIGN SHEET',p:(a,st,d,r)=>`Indoor multi-activity sports hall design sheet, ${a}. Floor plan: main hall with basketball/volleyball/futsal markings overlapping, bleachers, equipment store, referee room. Secondary: climbing wall, table tennis, children's soft play. Section: clear-span truss, sports lighting rig, acoustic panels. Facade: ${st} — clerestory band, graphic identity panel, entrance canopy. ${d==='full'?'Sports floor drainage plan.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  wedding:{t:'WEDDING HALL — ARCHITECTURAL DESIGN SHEET',p:(a,st,d,r)=>`Wedding hall design sheet, ${a}. Site: arrival forecourt with fountain, valet drop-off, parking, service yard. Floor plan: grand foyer with bride preparation suite, main banquet hall 500 persons, dance floor, stage, bridal table, kitchen/service corridor completely separated from guest circulation. Section: double-height entrance, coffered ceiling, chandeliers. Facade: ${st} — symmetrical, illuminated colonnade, porte-cochère. ${d==='full'?'Lighting layout plan.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  uni_lib:{t:'UNIVERSITY LIBRARY — ARCHITECTURAL DESIGN SHEET',p:(a,st,d,r)=>`University library design sheet, ${a}. Ground: information commons, group study rooms, print zone, cafe. Upper: quiet reading floors, carrel desks, special collections, archive stacks. Section: central atrium, open steel staircase, HVAC in exposed ceiling. Facade: ${st} — opaque panels at stacks, glazed bays at reading areas, solar shading fins south/west. ${d==='full'?'Wayfinding strategy diagram.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  vocational:{t:'VOCATIONAL TRAINING CENTER — DESIGN SHEET',p:(a,st,d,r)=>`Vocational training center design sheet, ${a}. Reception, workshop cluster: electrical, plumbing, carpentry, welding — each with tool storage and safety zone. Theory classrooms, computer lab, canteen. Site: delivery access, outdoor training yard. Section: high eaves, roof monitor for smoke extraction, concrete floor with drainage. Facade: ${st} — industrial aesthetic, corrugated metal, colored entrance pavilion. ${d==='full'?'Room data sheets per workshop.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  arch_studio:{t:'ARCHITECTURAL STUDIO — DESIGN SHEET',p:(a,st,d,r)=>`Open architectural studio design sheet, ${a}. Floor plan: open studio with drafting/model tables, pin-up wall, material library, principal's office with glazed partition, meeting room with writable walls, photo light room. Section: double-height, exposed mezzanine, north-facing monitor, south timber louvre. Facade: ${st} — white concrete base, timber screen upper, cantilevered canopy. ${d==='full'?'Interior axonometric.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  art_studio:{t:'ARTIST STUDIO — ARCHITECTURAL DESIGN SHEET',p:(a,st,d,r)=>`Artist workshop design sheet, ${a}. Floor plan: main studio with north-facing glazed wall, easel layout, sculpture area with resin floor, kiln room with ventilation shaft, canvas storage, critique space, gallery alcove. Section: north clerestory, ceiling track for hanging, mechanical ventilation. Facade: ${st} — raw exposed concrete block, large north window, corrugated rooflight strip. ${d==='full'?'Natural light analysis diagram.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  museum:{t:'SMALL MUSEUM — VISITOR CIRCULATION DESIGN SHEET',p:(a,st,d,r)=>`Small museum design sheet, ${a}. Sequential gallery rooms: one-way narrative journey, no cross-circulation, gift shop at end, orientation room at entry, temporary exhibition, education workshop. Section: varying ceiling heights, top-lit transition corridors, basement archive. Facade: ${st} — solid masonry protecting exhibits, dramatic entrance portal. Visitor flow diagram overlaid numbered. ${d==='full'?'Display lighting lux diagram.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  gallery:{t:'ART GALLERY — EXHIBITION CIRCUIT DESIGN SHEET',p:(a,st,d,r)=>`Art gallery design sheet, ${a}. Flexible white cube gallery with movable partitions in 2 configs, large-format and sculpture zones, loading bay with direct gallery access, art storage, preparation room. Section: picture rail track at 2400 and 3200, fiber optic and track lighting, north clerestory. Facade: ${st} — pure white rendered volumes, dark steel entrance frame, discreet signage. ${d==='full'?'Lux level floor diagram.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  pavilion_temp:{t:'TEMPORARY EXHIBITION PAVILION — DESIGN SHEET',p:(a,st,d,r)=>`Temporary exhibition pavilion design sheet, ${a}. Site plan: footprint in exhibition ground, approach, outdoor overflow. Floor plan: open flexible interior with exhibition stand grid, feature display zone, separated entrance/exit. Structural system: prefabricated steel portal frame, assembly sequence 1-2-3-4. Facade: ${st} — tensile membrane, branded graphic wrap. Details: connection node, ground anchor, membrane fixing. ${d==='full'?'Flat-pack transport dimensions + reuse rating.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  pavilion:{t:'INNOVATIVE ARCHITECTURAL PAVILION — DESIGN SHEET',p:(a,st,d,r)=>`Innovative pavilion design sheet, ${a}. Concept: form from folded surface or tensile geometry, step-by-step form-finding. Plan: open shaded space, integrated seating, information display. Structural exploded axonometric: primary members, secondary purlins, cladding, foundation. Shadow cast at noon and 3pm. Material: weathering steel or CLT, perforated metal, LED strip detail. Night rendering inset. ${d==='full'?'Construction cost-per-m² annotation.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  interactive_facade:{t:'INTERACTIVE FACADE — LIGHT AND SHADOW SHEET',p:(a,st,d,r)=>`Interactive facade controlling light and shadow, ${a}. Elevation: grid of dynamic pivoting aluminum louvers — each angle at 0°, 45°, 90°. Control strategy: sensor input (sun, light level, occupancy) → actuator response flow diagram. Shadow study: facade pattern at 9am, 12pm, 3pm solstice and equinox. Section: actuator mechanism, glazing behind, maintenance walkway. Energy performance: solar gain reduction vs louver angle graph. Night mode elevation. ${d==='full'?'BMS integration schematic.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  concrete_glass:{t:'CONCRETE AND GLASS FACADE — DESIGN SHEET',p:(a,st,d,r)=>`Balanced concrete and glass facade design sheet, ${a}. Elevation: board-marked concrete panels alternating with full-height glazing bays, proportion study with modular grid. Material study: 4 concrete finish samples (board-marked, bush-hammered, polished, exposed aggregate). Glazing: triple-glazed low-E, structural silicone joint. Section: concrete panel fixing — cast-in anchor, stainless bracket. Junction detail: concrete-to-glass corner. Night elevation. ${d==='full'?'Thermal performance comparison.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  brick_facade:{t:'CONTEMPORARY EXPOSED BRICK FACADE — DESIGN SHEET',p:(a,st,d,r)=>`Contemporary exposed brick facade design sheet, ${a}. Elevation: stretcher bond base, soldier course accents, recessed mortar, corbelled entrance canopy. Bond pattern study: 6 patterns compared — running, Flemish, stack, herringbone, basket weave, custom. Brick color palette: 5 samples buff to dark engineering. Section: insulated cavity, wall tie pattern, DPC. Window surround: reveal depth, steel angle lintel, frame recess. Night elevation showing shadow play on texture. ${d==='full'?'Mortar joint profile options.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  luxury_entry:{t:'LUXURY HOTEL ENTRANCE — ARCHITECTURAL DESIGN SHEET',p:(a,st,d,r)=>`Luxury hotel entrance design sheet, ${a}. Plan: arrival forecourt, porte-cochère, revolving door, lobby threshold. Section: canopy structure, coffered backlit soffit, drainage. Elevation: ${st} — double-height glazed entrance, stone columns, bronze signage. Landscape: formal planting, stone paving pattern, bollards, fountain. Night elevation with uplighting. Doorman positions marked. Materials: travertine, dark granite, bronze, backlit onyx. ${d==='full'?'Material quantities schedule.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  lobby_redesign:{t:'OFFICE LOBBY REDESIGN — BEFORE/AFTER SHEET',p:(a,st,d,r)=>`Office lobby redesign architectural sheet, ${a}. Existing vs proposed plan comparison. Proposed: repositioned reception, waiting lounge with power outlets, informal meeting alcove, cafe kiosk, digital display wall, security turnstile. Section: double-height volume revealed, feature pendant lighting. Feature wall elevation: stone cladding, company branding, indirect cove lighting. Materials: light limestone, white oak paneling, dark steel, living plant wall. Before-after montage inset. ${d==='full'?'Ceiling reflected plan.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  roof_garden:{t:'USABLE ROOF GARDEN — ARCHITECTURAL DESIGN SHEET',p:(a,st,d,r)=>`Usable daily roof garden design sheet, ${a}. Roof plan: active zone (exercise, yoga, table tennis), social zone (seating, dining, pergola), quiet zone (reading hammocks, planted screens), service zone (kitchen, irrigation). Section through construction: waterproof membrane, root barrier, drainage mat, growing medium — all labeled. Planting plan: shade trees, hedge screens, flowering perennials, herb garden. Structural loading diagram: slab capacity vs imposed load. ${d==='full'?'Drainage outlet plan.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  compound_spaces:{t:'GATED COMPOUND OUTDOOR SPACES — DESIGN SHEET',p:(a,st,d,r)=>`Gated residential compound outdoor spaces design sheet, ${a}. Master landscape: compound boundary, entry gate, central garden, children's play area by age zones, outdoor gym, jogging track with distances. Section through central garden: canopy layer, shrub screen, ground cover, irrigation pipe. Play area: equipment positions, safety fall zone, rubber surface. Lighting plan: pathway, feature uplighting, security. ${d==='full'?'Community access zone diagram.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  plaza:{t:'URBAN PLAZA — ARCHITECTURAL DESIGN SHEET',p:(a,st,d,r)=>`Urban plaza in front of public building design sheet, ${a}. Site plan: plaza boundary, pedestrian flows as arrows, secondary routes, grid of trees, water feature, seating clusters, bicycle parking, accessible route. Section: grade change with ramped paving and steps, seat walls, tree planters. Paving pattern plan: primary stone at main axis, textured secondary at seating. Elevation: human figures at 5 density levels. Night lighting plan: feature and safety zones. ${d==='full'?'Planting specification table.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  shaded_walkway:{t:'SHADED WALKWAY SYSTEM — HOT CLIMATE DESIGN SHEET',p:(a,st,d,r)=>`Shaded pedestrian walkway system design sheet, ${a}. Site plan: walkway network, shade continuity analysis — unshaded gaps >5m marked red. Section types: colonnade attached to building, freestanding pergola with climbing plants, tensile canopy on steel posts, tree canopy — each with shade cone at solar noon. Typical bay: pergola 3x3m grid, planting pockets, misting nozzle positions. Paving: pale reflective stone, high SRI value. Surface temperature comparison diagram. ${d==='full'?'Material and maintenance schedule.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  nature_concept:{t:'NATURE-INSPIRED ARCHITECTURAL CONCEPT — DESIGN SHEET',p:(a,st,d,r)=>`Nature and topography inspired concept design sheet, ${a}. Concept origin: 4 sketches — natural reference (dune, river, rock strata, leaf venation) → geometric extraction → structural interpretation → built form. Site plan: footprint responding to contours, green corridors. Floor plan: organic geometry with structural grid overlay. Section: building form following terrain, green roof merging with hillside. Facade: ${st} — layered horizontal banding echoing strata, stone, timber, rammed earth. Concept model photo inset. ${d==='full'?'Comparison diagram: nature reference vs final form.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  kinder:{t:'KINDERGARTEN — COLORFUL DESIGN SHEET',p:(a,st,d,r)=>`Kindergarten architectural design sheet, ${a}. Floor plan: 4 colorful classrooms each with child-scale WC, central play hall, arts and crafts room, outdoor play court directly accessible. Section: low window sills at 600mm, rubber safety floor, acoustic ceiling tiles. Facade: ${st} — primary color panels, oversized entrance portal, child-scale canopy, perforated metal play screen. ${d==='full'?'Color zoning plan + outdoor play equipment layout.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  sport_center:{t:'FITNESS CENTER TWO FLOORS — DESIGN SHEET',p:(a,st,d,r)=>`Two-floor fitness center architectural design sheet, ${a}. Ground: reception, weights floor, cardio area, group class studio, changing rooms. First floor: swimming pool with deck, spectator gallery, sauna, steam room. Section: pool structural slab, humidity ventilation system, observation glazing. Facade: ${st} — active street frontage, large windows showing activity, vertical fin shading. ${d==='full'?'Pool waterproofing detail.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  cultural:{t:'COMMUNITY CULTURAL CENTER — DESIGN SHEET',p:(a,st,d,r)=>`Community cultural center design sheet, ${a}. Floor plan: flexible main hall, stage with backstage, lobby with reception, kitchen, prayer rooms, accessible toilets. Outdoor: shaded terrace with folding glazed wall. Section: exposed timber trusses, acoustic insulation, clerestory ventilation. Facade: ${st} — local brick base, timber screen upper, wide covered verandah. ${d==='full'?'Landscape plan + parking.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  parking:{t:'MULTI-STOREY CAR PARK — ARCHITECTURAL DESIGN SHEET',p:(a,st,d,r)=>`Multi-storey car park design sheet, ${a}. Site plan: entry/exit ramps, pedestrian access, cycle parking. Typical floor plan: car bays layout (standard 2.5x5m, accessible 3.5x5m), drive aisle widths annotated, staircore and lift positions. Section through ramp: gradient 1:10 annotated, structural beam and soffit clearance. Facade: ${st} — perforated metal screen allowing ventilation, graphic identity element, wayfinding signage. ${d==='full'?'Structural bay diagram.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  market:{t:'COVERED TRADITIONAL MARKET — DESIGN SHEET',p:(a,st,d,r)=>`Covered traditional market architectural design sheet, ${a}. Site plan: pedestrian entries from multiple streets, vendor stalls in grid, anchor food hall, service lane for deliveries. Section through roof: timber or steel structure, high-level louvers for natural ventilation and light, rain protection. Facade: ${st} — arched openings referencing traditional souq, contemporary materials. Stall plan detail: standard stall 3x3m, serviced with power and drainage. ${d==='full'?'Ventilation CFD diagram.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  mall:{t:'COMPACT RETAIL MALL — ARCHITECTURAL DESIGN SHEET',p:(a,st,d,r)=>`Compact retail mall design sheet, ${a}, 3 floors. Ground plan: main street retail R1-R16 labeled, central atrium void, food court, anchor store, mall entrance. Typical upper floor: retail, escalator and lift core. Section through atrium: natural light penetration, escalator banks. Facade: ${st} — retail signage zone, glazed entrance portal, floor lines expressed. ${d==='full'?'Section A-A through atrium.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`},
+  cowork:{t:'COWORKING SPACE — ARCHITECTURAL DESIGN SHEET',p:(a,st,d,r)=>`Coworking space design sheet, ${a}. Open hot-desk zone with floor box grid, private offices around perimeter, phone booths, meeting rooms with glazed fronts, community kitchen as central hub, reception. Section: exposed concrete ceiling, acoustic baffles, mechanical services in open trays. Facade: ${st} — full-height glazing showing activity, bold brand signage. ${d==='full'?'Density plan showing 2 configurations.':''} Signed: Ahmed El-Fouly Architect --ar ${r} --style raw --v 6`}
+};
+
+function getPlan(key){return plans[key]||plans.default}
+function getElev(key){return elevs[key]||elevs.default}
+
+function generate(){
+  const btype=document.getElementById('btype').value;
+  const style=document.getElementById('style').value;
+  const area=document.getElementById('area').value;
+  const ratio=document.getElementById('ratio').value;
+  const detail=document.getElementById('detail').value;
+  const d=DB[btype]||DB.office;
+
+  document.getElementById('sh-title').textContent=d.t;
+  document.getElementById('sh-meta').textContent=`${area} · ${ratio} · MJ v6 · RAW`;
+  document.getElementById('ftag').textContent=`AEF · ${new Date().getFullYear()} · ARCHITECTURAL AI PROMPTS`;
+
+  const pSvg=document.getElementById('plan-svg');
+  const eSvg=document.getElementById('elev-svg');
+  pSvg.innerHTML='';eSvg.innerHTML='';
+  getPlan(btype)(pSvg);
+  getElev(btype)(eSvg);
+
+  document.getElementById('prompt-text').textContent=d.p(area,style,detail,ratio);
+
+  const sheet=document.getElementById('sheet');
+  sheet.classList.add('on');
+  sheet.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function copyP(){
+  const t=document.getElementById('prompt-text').textContent;
+  navigator.clipboard.writeText(t).then(()=>{
+    const m=document.getElementById('cmsg');
+    m.style.opacity='1';
+    setTimeout(()=>{m.style.opacity='0'},2000);
+  });
+}
+</script>
