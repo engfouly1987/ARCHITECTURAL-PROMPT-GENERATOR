@@ -1,134 +1,129 @@
-🏛️ Architectural Prompt Generator
+<p align="center">
+  <img src="docs/social-preview.png" alt="Architectural Prompt Generator — AF LAB" width="100%">
+</p>
 
-80 Building Types • Professional Design Sheet System
-By Ahmed El-Fouly – Architect / AI Design Prompts
+<h1 align="center">Architectural Prompt Generator</h1>
 
-✨ Overview
+<p align="center">
+  <b>أكتر من 80 نوع مبنى وطُرز متعددة، ومخرَج لوحة تصميم فيها مساقط وواجهات بأبعاد</b><br>
+  80+ building types, multiple styles, and a design-sheet output with plans and elevations.
+</p>
 
-Architectural Prompt Generator هو أداة متخصصة لتوليد برومبتات احترافية للعمارة باستخدام الذكاء الاصطناعي (MidJourney / AI Tools)، مع إخراج جاهز على شكل:
+<p align="center">
+  <a href="https://af-lab.archprompt.workers.dev"><img alt="AF LAB" src="https://img.shields.io/badge/AF%20LAB-AF--P05-0e1a2b?labelColor=a8834e&style=flat-square"></a>
+  
+  <img alt="License" src="https://img.shields.io/badge/License-MIT-0e1a2b?labelColor=16263d&style=flat-square">
+  <img alt="Stack" src="https://img.shields.io/badge/HTML%20%C2%B7%20CSS%20%C2%B7%20JS-0e1a2b?labelColor=16263d&style=flat-square">
+</p>
 
-📐 Architectural Design Sheets
-🏠 Floor Plans
-🧱 Facade Elevations
-🎯 Structured AI Prompts
+<p align="center">
+  
+  <a href="https://af-lab.archprompt.workers.dev">AF LAB</a> &nbsp;·&nbsp;
+  <a href="https://wa.me/201284537045">WhatsApp</a>
+</p>
 
-الأداة مصممة للمعماريين والمصممين لإنتاج نتائج دقيقة وقابلة للتنفيذ بسرعة.
+---
 
-🚀 Features
-🧩 1. 80+ Building Types
+## نظرة سريعة · Overview
 
-اختيار من مجموعة واسعة من أنواع المباني:
+<div dir="rtl">
 
-فيلا عصرية
-بيت ريفي
-Tiny House
-شقق سكنية
-منازل ساحلية
-مشاريع اقتصادية
-وأكثر...
-🎨 2. Architectural Styles
+أداة لتوليد برومبتات معمارية احترافية للذكاء الاصطناعي (Midjourney وأدوات مشابهة)، بمخرَج جاهز على شكل **لوحة تصميم معمارية** فيها مساقط وواجهات بأبعاد. مصممة للمعماريين والمصممين عشان يوصلوا لنتيجة دقيقة بسرعة.
 
-يدعم عدة أساليب معمارية:
+</div>
 
-Contemporary Modern
-Minimalist
-Bioclimatic
-Industrial
-Vernacular Arabic
-Neoclassical
-Brutalist
-Parametric
-📏 3. Custom Parameters
-المساحة (60m² → 2000m²)
-نسبة الأبعاد:
-3:2 أفقي
-16:9 سينمائي
-2:3 رأسي
-1:1 مربع
-مستوى التفاصيل:
-مسقط + واجهة فقط
-كامل (مسقط + واجهة + قطاع)
-Concept + Render
-🧠 4. Smart Prompt Generation
+Generates professional architectural prompts for AI image tools, with a design-sheet output: floor plans, facade elevations, dimensions and a structured prompt.
 
-يتم توليد برومبت احترافي تلقائيًا يحتوي على:
+<p align="center">
+  <img src="docs/preview.png" alt="Architectural Prompt Generator preview" width="760">
+</p>
 
-وصف المشروع
-توزيع الفراغات
-تفاصيل الواجهة
-تعليمات CAD
-إعدادات MidJourney
+## المزايا · Features
 
-مثال:
+<div dir="rtl">
 
-Architectural design sheet modern narrow-plot villa, 300sqm, 8x20m rectangular footprint, two floors. Floor plan: entrance hall, open living-dining, kitchen with service door, 3 bedrooms, 2 bathrooms, staircase. Facade elevation: contemporary modern – floor-to-ceiling glass panels, cantilevered upper floor, clean white and dark grey cladding. Dimensions labeled, north arrow, scale bar. Side elevation + roof plan. Signed: Ahmed El-Fouly Architect. Professional CAD linework, black on white --ar 3:2 --style raw --v 6
-🖼️ 5. Design Sheet Output
-مخططات (Floor Plans)
-واجهات (Elevations)
-Layout منظم
-Scale & Dimensions
-جاهز للطباعة أو العرض
-🛠️ Tech Stack (Suggested)
+- 🧩 **أكتر من 80 نوع مبنى:** فيلا عصرية، بيت ريفي، Tiny House، شقق سكنية، منازل ساحلية، مشاريع اقتصادية وغيرها.
+- 🎨 **طُرز معمارية:** Contemporary Modern، Minimalist، Bioclimatic، Industrial، Vernacular Arabic، Neoclassical، Brutalist، Parametric.
+- 📏 **معاملات قابلة للتخصيص:** المساحة (60 م² إلى 2000 م²)، ونسبة الشاشة (3:2 أفقي، 16:9 سينمائي، 2:3 رأسي، 1:1 مربع)، ومستوى التفصيل (مسقط وواجهة، أو كامل بقطاع، أو Concept وRender).
+- 🧠 **توليد ذكي للبرومبت:** وصف المشروع، وتوزيع الفراغات، وتفاصيل الواجهة، وتعليمات CAD، وإعدادات Midjourney.
 
-عدّل حسب مشروعك لو حابب
+</div>
 
-Frontend: HTML / CSS / JavaScript
-UI: Custom Dark Theme
-AI: MidJourney Prompts
-Optional: React / Next.js
-📂 Project Structure
-/project
- ├── index.html
- ├── style.css
- ├── script.js
- ├── assets/
- │    ├── images
- │    └── icons
- └── README.md
-⚙️ How to Use
-اختر نوع المبنى
-حدد الأسلوب المعماري
-أدخل المساحة
-اختر نسبة الصورة
-حدد مستوى التفاصيل
-اضغط "توليد شيت البرومبت المعماري"
-انسخ البرومبت واستخدمه في MidJourney 🎯
-🎯 Use Cases
-المعماريين (Architects)
-طلاب العمارة
-مصممي AI Art
-Freelancers
-مكاتب التصميم
-📸 Preview
+**مثال · Example**
 
-(حط هنا screenshots من المشروع)
+```text
+Architectural design sheet modern narrow-plot villa, 300sqm, 8x20m rectangular footprint, two floors.
+Floor plan: entrance hall, open living-dining, kitchen with service door, 3 bedrooms, 2 bathrooms, staircase.
+Facade elevation: contemporary modern – floor-to-ceiling glass panels, cantilevered upper floor, clean white and dark grey cladding.
+Dimensions labeled, north arrow, scale bar. Side elevation + roof plan.
+Professional CAD linework, black on white --ar 3:2 --style raw --v 6
+```
 
-📌 Roadmap
- إضافة 3D massing prompts
- دعم Stable Diffusion
- Export PDF Design Sheet
- Custom Room Configuration
- Multi-language support
-🤝 Contributing
+## الاستخدام · How to use
 
-أي تحسينات أو أفكار مرحب بها:
+<div dir="rtl">
 
-Fork المشروع
-اعمل Branch جديد
-اعمل Commit
-افتح Pull Request
-📄 License
+1. اختار نوع المبنى والأسلوب المعماري.
+2. أدخل المساحة واختار نسبة الصورة ومستوى التفصيل.
+3. اضغط **توليد شيت البرومبت المعماري**.
+4. انسخ البرومبت واستخدمه في Midjourney.
 
-MIT License
+</div>
 
-👨‍🎨 Author
+## الاستخدامات · Use cases
 
-Ahmed El-Fouly
-Architect | AI Design Systems
+المعماريين وطلبة العمارة، ومصممي فن الذكاء الاصطناعي، والـ Freelancers، ومكاتب التصميم. · Architects and students, AI-art designers, freelancers and design offices.
 
-⭐ Support
+## خطة التطوير · Roadmap
 
-لو المشروع عجبك:
+- [ ] 3D massing prompts
+- [ ] دعم Stable Diffusion · Stable Diffusion support
+- [ ] تصدير لوحة التصميم PDF · PDF export of the design sheet
+- [ ] إعداد غرف مخصص · custom room configuration
+- [ ] تعدد اللغات · multi-language
 
-⭐ اعمله Star على GitHub
-📢 شاركه مع غيرك
+## تشغيل محلي · Run locally
+
+```bash
+git clone https://github.com/engfouly1987/ARCHITECTURAL-PROMPT-GENERATOR.git
+cd ARCHITECTURAL-PROMPT-GENERATOR
+# افتح index.html في المتصفح · open index.html in your browser
+```
+
+مفيش تثبيت ولا خادم. ملف واحد يشتغل مباشرة. · No install, no server: it runs straight from the file.
+
+## المساهمة · Contributing
+
+<div dir="rtl">
+
+أي اقتراح أو تحسين مرحّب بيه: افتح Issue أو اعمل Fork و Pull Request.
+
+</div>
+
+## الترخيص · License
+
+MIT
+
+## التواصل · Contact
+
+<div dir="rtl">
+
+للاستفسار أو طلب أداة أو تعديل، أسرع طريقة **واتساب**. وباقي القنوات تحت.
+
+</div>
+
+| | |
+|---|---|
+| 💬 WhatsApp | [+20 128 453 7045](https://wa.me/201284537045) |
+| ✉️ Email | [ahmedfouly08@gmail.com](mailto:ahmedfouly08@gmail.com) |
+| 🌐 AF LAB | [af-lab.archprompt.workers.dev](https://af-lab.archprompt.workers.dev) |
+| Facebook | [ahmed.fooly](https://www.facebook.com/ahmed.fooly) |
+| Instagram | [@ah.elfouly](https://www.instagram.com/ah.elfouly/) |
+| GitHub | [engfouly1987](https://github.com/engfouly1987) |
+
+---
+
+<p align="center">
+  <sub>جزء من <a href="https://af-lab.archprompt.workers.dev"><b>AF LAB</b></a> — أدوات ومؤلفات وتطبيقات ويب للمهندسين والمعماريين.<br>
+  Part of <a href="https://af-lab.archprompt.workers.dev"><b>AF LAB</b></a> — tools, books and web apps for engineers and architects.</sub>
+</p>
